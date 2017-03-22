@@ -386,6 +386,21 @@ public class AnchorDx_DataOrganizer_2
 		return 0;
 	}
 	
+	//上传文件
+	public static void Upload_File(String PutPath)
+	{
+		//String Account = "admin";
+		//String Password = "admin123456";
+		String cmd = "/opt/local/bin/python35/python /var/script/alan/10k_api_script/white_black_collections.py -path " + PutPath;
+		//System.out.println(cmd);
+		try{
+			Runtime.getRuntime().exec(cmd);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
    public static void main(String[] args) throws Exception {
 	   
 	   	System.out.println();
@@ -394,7 +409,7 @@ public class AnchorDx_DataOrganizer_2
 		System.out.println("程序开始时间: "+now_star.getTime());
 		System.out.println("程序开始时间: "+formatter_star.format(now_star.getTime()));
 		System.out.println("===============================================");
-		System.out.println("Version: AnchorDx_DataOrganizer.V1.1.1");
+		System.out.println("Version: AnchorDx_DataOrganizer.V1.1.2");
 		System.out.println("***********************************************");
 		
 		//复制zhirong_lu@192.192.192.200:/wdmycloud/anchordx_cloud/杨莹莹/基准所有项目收样信息表样本处理追踪表到本地
@@ -435,6 +450,9 @@ public class AnchorDx_DataOrganizer_2
 				System.out.println("AnchorDx_CollectData_SearchFiles finish!");
 			}
 		}
+		
+		Thread.sleep(3000);
+		Upload_File(Mkdir_Path);//上传文件
 		
 		System.out.println();
 		System.out.println("===============================================");
@@ -1608,20 +1626,6 @@ class WorkThread extends Thread {
 			}
 		}catch(Exception e){
 			System.out.println("链接出错！");
-		}
-	}
-	
-	//上传文件
-	public static void Upload_File(String Porject_Name, String White_file, String Black_file)
-	{
-		String Account = "admin";
-		String Password = "admin123456";
-		String cmd = "/opt/local/bin/python35/python /var/script/alan/10k_api_script/10kmop_api_scirpt.py " + "-account " + Account + " -password " + Password + " -p_name " + Porject_Name + " -white_file " + White_file + " -black_file " + Black_file;
-		try{
-			Runtime.getRuntime().exec(cmd);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 	
