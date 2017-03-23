@@ -288,7 +288,7 @@ public class AnchorDx_DataOrganizer_2
 	}
 	
 	//查找并创建对应目录(更新模式)
-	@SuppressWarnings("null")
+	//@SuppressWarnings("null")
 	public static int UpdataCopydirAndReanExecl( File des_file, String Mkdir_Path, String excel_part_name )
 	{	
 		//ArrayList <String> dir_name = new ArrayList<String>();
@@ -375,11 +375,28 @@ public class AnchorDx_DataOrganizer_2
 		return 0;
 	}
 	
-	public static int CopyExcel(){
+	/*public static int CopyExcel(){
 		try{
 			String cmd_Sample_statistics = "sh ./CopyExcel.sh";
 			//String cmd_Sample_statistics[] = {"sh", "。/CopyExcel.sh"};
 			Runtime.getRuntime().exec(cmd_Sample_statistics);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return 0;
+	}*/
+	
+	public static int CopyExcel(){
+		try{
+			//String cmd_Sample_statistics = "sh ./CopyExcel.sh";		
+			String cmd_Sample_statistics[] = {"rsync", "-aP", "--include=*/","--include=**/*样本处理追踪表*.xls*", "--exclude=*", "zhirong_lu@192.192.192.220:/wdmycloud/anchordx_cloud/杨莹莹/基准所有项目收样信息表样本处理追踪表", "."};
+			//Runtime.getRuntime().exec(cmd_Sample_statistics);
+			Process process = Runtime.getRuntime().exec(cmd_Sample_statistics);
+			BufferedReader input = new BufferedReader(new InputStreamReader(process.getInputStream()));
+			String line = null;
+			while ((line = input.readLine()) != null) {
+				//System.out.println(line);
+			}
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -409,13 +426,13 @@ public class AnchorDx_DataOrganizer_2
 		System.out.println("程序开始时间: "+now_star.getTime());
 		System.out.println("程序开始时间: "+formatter_star.format(now_star.getTime()));
 		System.out.println("===============================================");
-		System.out.println("Version: AnchorDx_DataOrganizer.V1.1.2");
+		System.out.println("Version: AnchorDx_DataOrganizer.V1.1.4");
 		System.out.println("***********************************************");
 		
 		//复制zhirong_lu@192.192.192.200:/wdmycloud/anchordx_cloud/杨莹莹/基准所有项目收样信息表样本处理追踪表到本地
 		int tag = CopyExcel();
 		System.out.println("CopyExcel finish!");
-		Thread.sleep(3000);
+		//Thread.sleep(10000);
 	   
 		//String porject_Path = "/home/zhirong_lu/code/test/5/基准所有项目收样信息表样本处理追踪表"; // 源文件路径
 		//String Mkdir_Path = "/home/zhirong_lu/code/test/5/Projects/"; //目标路径
@@ -423,7 +440,27 @@ public class AnchorDx_DataOrganizer_2
 		String Mkdir_Path = "./Projects/"; //目标路径
 		String excel_part_name = "样本处理追踪表v1_广州基准医疗";
 		int Pattern = 0;
-		File des_file = new File( porject_Path );
+		File des_file = null;
+		int time = 0;
+		while(true){
+			des_file = new File( porject_Path );
+			if(des_file.exists()){
+				break;
+			}else if(time == 100) {
+				System.out.println("对不起，由于在1000秒内无法获取到“./基准所有项目收样信息表样本处理追踪表”目录，因此结束程序！！！");
+				System.out.println();
+				System.out.println("===============================================");
+				Calendar now_end = Calendar.getInstance();
+				SimpleDateFormat formatter_end = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				System.out.println("程序结束时间: "+now_end.getTime());
+				System.out.println("程序结束时间: "+formatter_end.format(now_end.getTime()));
+				return;
+			}else{
+				Thread.sleep(10000);
+				time ++;
+				continue;
+			}
+		}
 		
 		int args_len = args.length;//输入参数长度
 		for(int len = 0; len < args_len; len++){
