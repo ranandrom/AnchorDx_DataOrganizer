@@ -533,9 +533,6 @@ class AnchorDx_CollectData_SearchFiles
 					}
 				}
 				read.close();
-			}else{
-				System.out.println("找不到指定的文件："+filePath);
-				return "OFF";
 			}
 		}catch (Exception e) {
 			System.out.println("读取文件内容出错："+filePath);
